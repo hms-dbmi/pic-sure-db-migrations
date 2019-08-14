@@ -1,0 +1,77 @@
+FROM alpine:3.7
+MAINTAINER ANIL KUMAR DEGALA <anilkumar.degala@childrens.harvard.edu>
+
+COPY app /app
+WORKDIR /app
+
+
+ADD ./flyway-configs /flyway-configs
+
+ADD ./configs /configs
+RUN chown -R root:root /configs
+
+RUN apk --no-cache update
+RUN apk add --no-cache bash
+
+# python
+RUN apk --no-cache add py-pip
+
+
+RUN apk add --no-cache python3 \
+	&& apk add --no-cache mysql-client \
+	&& apk add --no-cache git \
+	&& apk add --no-cache openjdk8 \
+	&& apk add --no-cache maven \
+	&& apk add --no-cache curl
+	
+RUN pip install --upgrade pip	 
+RUN pip3 install -U python-dotenv 
+RUN pip3 install -r /configs/requirements-lite.txt
+
+   
+
+RUN apk -v --update add \ 
+        groff \
+        less \
+        mailcap \
+        && \
+    pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic && \
+    apk -v --purge del py-pip && \
+    rm /var/cache/apk/*
+
+VOLUME /root/.aws
+
+
+RUN apk --no-cache add apache-ant --update-cache --repository http://dl-4.alpinelinux.org/alpine/edge/community/ --allow-untrusted
+	 
+
+ENV ANT_HOME /usr/share/java/apache-ant
+ENV PATH $PATH:$ANT_HOME/bin
+ 
+ENV M2_HOME /usr/share/maven
+ENV PATH ${M2_HOME}/bin:$PATH  
+
+RUN pip3 install boto3
+
+
+
+ENV FLYWAY_VERSION 5.2.4
+ENV FLYWAY_HOME=/opt/flyway
+
+WORKDIR /opt/flyway
+
+RUN curl -L https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${FLYWAY_VERSION}/flyway-commandline-${FLYWAY_VERSION}.tar.gz -o flyway-commandline-${FLYWAY_VERSION}.tar.gz \
+  && tar -xzf flyway-commandline-${FLYWAY_VERSION}.tar.gz   --strip-components=1 \
+  && rm flyway-commandline-${FLYWAY_VERSION}.tar.gz
+   
+
+RUN chmod +x /opt/flyway/flyway 
+RUN ln -s /opt/flyway/flyway /usr/local/bin
+
+
+WORKDIR /configs 
+RUN chmod 777 /configs/configure-aws.sh
+RUN chmod 777 /configs/migration-orchestrator.sh 
+
+ENTRYPOINT ["python3"] 
+CMD ["/app/index.py"]
