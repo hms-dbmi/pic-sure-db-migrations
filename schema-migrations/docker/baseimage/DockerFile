@@ -70,8 +70,10 @@ RUN ln -s /opt/flyway/flyway /usr/local/bin
 
 
 WORKDIR /configs 
+RUN chmod -R 777 /configs/
 RUN chmod 777 /configs/configure-aws.sh
 RUN chmod 777 /configs/migration-orchestrator.sh 
+RUN chmod 777 /configs/get-pic-sure-auth-microapp-code-from-repo.sh
 
 ENTRYPOINT ["python3"] 
 CMD ["/app/index.py"]
