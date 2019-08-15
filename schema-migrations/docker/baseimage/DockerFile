@@ -6,6 +6,7 @@ WORKDIR /app
 
 
 ADD ./flyway-configs /flyway-configs
+RUN chmod -R 777 /flyway-configs/
 
 ADD ./configs /configs
 RUN chown -R root:root /configs
