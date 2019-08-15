@@ -3,7 +3,7 @@
 echo "Migration Orchestrator: Begin"
 
 
-flyway_conf_location=/flyway/conf/flyway.conf
+flyway_conf_location=/flyway-configs/conf/flyway.conf
 
 
 # Validate Database Connection
