@@ -9,7 +9,7 @@ def validate_mysql_connection():
     try:
         config = configparser.ConfigParser()
         config.read('/flyway-configs/conf/db.properties') 
-        connection = pymysql.connect(host=config.get('mysql', 'mysql.host'), port=config.get('mysql', 'mysql.port'), user=config.get('mysql', 'mysql.user'), passwd=config.get('mysql', 'mysql.password'), db=config.get('mysql', 'mysql.schema'))  
+        connection = pymysql.connect(host=config.get('mysql', 'mysql.host'), port=int(config.get('mysql', 'mysql.port')), user=config.get('mysql', 'mysql.user'), passwd=config.get('mysql', 'mysql.password'), db=config.get('mysql', 'mysql.schema'))  
         if connection != None:
             connect_check = "Passed"  
     except Exception as e: 
