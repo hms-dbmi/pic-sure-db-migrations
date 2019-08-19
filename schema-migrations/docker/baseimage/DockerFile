@@ -5,8 +5,9 @@ COPY app /app
 WORKDIR /app
 
 
-ADD ./flyway-configs /flyway-configs
-RUN chmod -R 777 /flyway-configs/
+ADD ./flyway-configs /flyway-configs 
+RUN chown -R root:root /flyway-configs
+RUN chmod -R 777 /flyway-configs
 
 ADD ./configs /configs
 RUN chown -R root:root /configs

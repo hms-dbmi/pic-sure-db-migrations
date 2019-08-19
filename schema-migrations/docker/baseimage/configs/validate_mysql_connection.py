@@ -8,7 +8,7 @@ def validate_mysql_connection():
     connect_check = None
     try:
         config = configparser.ConfigParser()
-        config.read('/flyway-configs/conf/db.properties') 
+        config.read('/flyway-configs/db.properties') 
         connection = pymysql.connect(host=config.get('mysql', 'mysql.host'), port=int(config.get('mysql', 'mysql.port')), user=config.get('mysql', 'mysql.user'), passwd=config.get('mysql', 'mysql.password'), db=config.get('mysql', 'mysql.schema'))  
         if connection != None:
             connect_check = "Passed"  
