@@ -10,7 +10,7 @@ chmod -R 777 /migrations-temp
 mkdir /migrations
 chmod -R 777 /migrations
 cd /migrations
-mkdir /sql
+mkdir sql
 chmod -R 777 /migrations/sql
 
 

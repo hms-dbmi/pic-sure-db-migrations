@@ -1,0 +1,5 @@
+# plugins installed
+https://plugins.jenkins.io/list-git-branches-parameter
+	
+
+# 4ee378d96dee4622810800f8362c5898
