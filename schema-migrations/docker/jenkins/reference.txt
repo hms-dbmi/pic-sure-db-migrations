@@ -3,3 +3,12 @@ https://plugins.jenkins.io/list-git-branches-parameter
 	
 
 # 4ee378d96dee4622810800f8362c5898
+
+sudo mount -t vboxsf -o uid=1000,gid=50 flyway-configs /flyway-configs
+
+or 
+
+sudo vi /mnt/sda1/var/lib/boot2docker/profile
+
+mkdir /flyway-configs
+sudo mount -t vboxsf -o uid=1000,gid=50 flyway-configs /flyway-configs

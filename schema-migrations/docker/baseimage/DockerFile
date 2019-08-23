@@ -76,8 +76,11 @@ RUN chmod -R 777 /configs/
 RUN chmod 777 /configs/configure-aws.sh
 RUN chmod 777 /configs/auth-migration-orchestrator.sh
 RUN chmod 777 /configs/picsure-migration-orchestrator.sh 
+RUN chmod 777 /configs/irct-migration-orchestrator.sh
+
 RUN chmod 777 /configs/get-psama-schema-from-repo.sh
 RUN chmod 777 /configs/get-picsure-schema-from-repo.sh
+RUN chmod 777 /configs/get-irct-schema-from-repo.sh
 
 ENTRYPOINT ["python3"] 
 CMD ["/app/index.py"]
