@@ -1,5 +1,3 @@
 .project
 .settings
 .pydevproject
-schema-migrations/jenkins-jobs/*
-schema-migrations/docker/auth/*
