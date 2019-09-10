@@ -20,7 +20,7 @@ git checkout $2
 git status -u
 git branch
 
-cd pic-sure-auth-db/db
+cd auth
 
 cp -R sql /migrations/sql
 
