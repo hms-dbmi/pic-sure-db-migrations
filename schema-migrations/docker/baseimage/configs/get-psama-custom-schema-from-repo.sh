@@ -19,10 +19,9 @@ git clone $1 .
 git checkout $2
 git status -u
 git branch
+ 
 
-cd auth
-
-cp -R sql /migrations/sql
+cp -R auth /migrations/sql
 
 chmod -R 777 /migrations/sql
  
