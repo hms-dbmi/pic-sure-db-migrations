@@ -4,6 +4,7 @@ MAINTAINER ANIL KUMAR DEGALA <anilkumar.degala@childrens.harvard.edu>
 COPY app /app
 WORKDIR /app
 
+Add ./custom-migrations /custom-migrations
 
 ADD ./flyway-configs /flyway-configs 
 RUN chown -R root:root /flyway-configs

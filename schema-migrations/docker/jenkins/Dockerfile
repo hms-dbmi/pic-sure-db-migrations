@@ -11,3 +11,5 @@ RUN docker --version
 RUN apt-get install jq -y
 
 USER root
+
+VOLUME /var/jenkins_home

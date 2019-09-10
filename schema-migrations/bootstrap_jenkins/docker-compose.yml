@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  pic-sure-jenkins:
+    container_name: pic-sure-jenkins
+    image: dbmi/pic-sure-db-migrations:picsure_jenkins_v1.0
+    ports:
+        - '9081:8080'
+    volumes:
+        - pic-sure-jenkins-data:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /flyway-configs/:/flyway-configs
+        
+
+volumes:
+  pic-sure-jenkins-data:

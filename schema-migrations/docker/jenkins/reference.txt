@@ -2,7 +2,7 @@
 https://plugins.jenkins.io/list-git-branches-parameter
 	
 
-# 4ee378d96dee4622810800f8362c5898
+# 08203450ee2e4aae8a0f6ee2e5758c73
 
 sudo mount -t vboxsf -o uid=1000,gid=50 flyway-configs /flyway-configs
 
@@ -12,3 +12,8 @@ sudo vi /mnt/sda1/var/lib/boot2docker/profile
 
 mkdir /flyway-configs
 sudo mount -t vboxsf -o uid=1000,gid=50 flyway-configs /flyway-configs
+
+
+docker commit -m 'picsure base jenkins image' jenkins dbmi/pic-sure-db-migrations:picsure_jenkins_v1.0
+
+docker push dbmi/pic-sure-db-migrations:picsure_jenkins_v1.0 
