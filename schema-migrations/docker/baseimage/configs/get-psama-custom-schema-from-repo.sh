@@ -21,7 +21,7 @@ git status -u
 git branch
  
 
-cp -R auth /migrations/sql
+cp -R auth/ /migrations/sql
 
 chmod -R 777 /migrations/sql
  
