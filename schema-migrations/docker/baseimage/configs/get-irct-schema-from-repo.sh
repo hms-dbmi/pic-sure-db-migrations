@@ -22,7 +22,7 @@ git branch
 
 cd IRCT-API/src/main/resources/db/
 
-cp -R sql /migrations/sql
+cp -R sql/ /migrations/sql
 
 chmod -R 777 /migrations/sql
  

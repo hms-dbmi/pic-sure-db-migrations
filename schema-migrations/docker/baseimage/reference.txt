@@ -2,3 +2,15 @@ base image job:
 
 pic-sure-db-migration-base-image
 
+
+
+SELECT * FROM auth.flyway_schema_history;
+
+SELECT * FROM auth.flyway_custom_schema_history;
+
+
+create table auth.flyway_custom_schema_history as select * from auth.flyway_schema_history where 1 = 2;
+
+
+drop table auth.custom_auth_table_1;
+drop table auth.flyway_custom_schema_history;
