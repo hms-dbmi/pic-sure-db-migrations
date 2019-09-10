@@ -17,3 +17,6 @@ sudo mount -t vboxsf -o uid=1000,gid=50 flyway-configs /flyway-configs
 docker commit -m 'picsure base jenkins image' jenkins dbmi/pic-sure-db-migrations:picsure_jenkins_v1.0
 
 docker push dbmi/pic-sure-db-migrations:picsure_jenkins_v1.0 
+
+
+https://github.com/hms-dbmi/pic-sure-db-custom-migrations.git
