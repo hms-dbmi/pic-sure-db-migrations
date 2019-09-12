@@ -4,18 +4,16 @@ MAINTAINER ANIL KUMAR DEGALA <anilkumar.degala@childrens.harvard.edu>
 COPY app /app
 WORKDIR /app
 
-ADD ./flyway-configs /flyway-configs 
+
+ADD flyway-configs /flyway-configs
 RUN chown -R root:root /flyway-configs
 RUN chmod -R 777 /flyway-configs
 
-ADD ./custom-migrations /custom-migrations
-RUN chown -R root:root /custom-migrations
-RUN chmod -R 777 /custom-migrations
-
-
-
-ADD ./configs /configs
-RUN chown -R root:root /configs
+ADD picsure-db-migrations /picsure-db-migrations
+RUN chown -R root:root /picsure-db-migrations
+RUN chmod -R 777 /picsure-db-migrations
+ 
+ 
 
 RUN apk --no-cache update
 RUN apk add --no-cache bash
@@ -33,7 +31,7 @@ RUN apk add --no-cache python3 \
 	
 RUN pip install --upgrade pip	 
 RUN pip3 install -U python-dotenv 
-RUN pip3 install -r /configs/requirements-lite.txt
+RUN pip3 install -r /picsure-db-migrations/requirements-lite.txt
 
    
 
@@ -76,16 +74,9 @@ RUN chmod +x /opt/flyway/flyway
 RUN ln -s /opt/flyway/flyway /usr/local/bin
 
 
-WORKDIR /configs 
-RUN chmod -R 777 /configs/
-RUN chmod 777 /configs/configure-aws.sh
-RUN chmod 777 /configs/auth-migration-orchestrator.sh
-RUN chmod 777 /configs/picsure-migration-orchestrator.sh 
-RUN chmod 777 /configs/irct-migration-orchestrator.sh
+WORKDIR /picsure-db-migrations/scripts  
 
-RUN chmod 777 /configs/get-psama-schema-from-repo.sh
-RUN chmod 777 /configs/get-picsure-schema-from-repo.sh
-RUN chmod 777 /configs/get-irct-schema-from-repo.sh
+RUN apk add tree
 
 ENTRYPOINT ["python3"] 
 CMD ["/app/index.py"]

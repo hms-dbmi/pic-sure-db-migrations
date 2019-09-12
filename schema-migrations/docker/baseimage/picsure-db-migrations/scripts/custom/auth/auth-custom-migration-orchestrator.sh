@@ -3,7 +3,7 @@
 echo "Migration Orchestrator: Begin"
 
 
-flyway_conf_location=/flyway-configs/flyway-auth.conf
+flyway_conf_location=/flyway-configs/flyway-auth-custom.conf
 
 
 
@@ -15,12 +15,7 @@ db_check=`python3 validate_mysql_connection.py`
 if [ "Passed" == "$db_check" ]; then
     echo "Database connection check passed, continue Flyway migration" 
     
-     flyway -X -sqlMigrationPrefix=CUSTOM -configFiles=${flyway_conf_location} -table=flyway_custom_schema_history migrate
-    
-     
-    
-    
-    
+     flyway -X  -baselineOnMigrate=true -sqlMigrationPrefix=CUSTOM -configFiles=${flyway_conf_location} -table=flyway_custom_schema_history migrate 
     
 else
 
