@@ -8,7 +8,7 @@ flyway_conf_location=/flyway-configs/flyway-picsure.conf
 
 # Validate Database Connection
 
-db_check=`python3 validate_mysql_connection.py`
+db_check=`python3 /picsure-db-migrations/scripts/validate_mysql_connection.py`
 
 if [ "Passed" == "$db_check" ]; then
     echo "Database connection check passed, continue Flyway migration"
