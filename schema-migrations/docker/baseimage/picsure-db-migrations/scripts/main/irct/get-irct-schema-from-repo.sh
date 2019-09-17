@@ -1,31 +1,29 @@
 #!/bin/bash
 
-echo "Get code from Repo: Begin"
+echo "IRCT Schema From Repo -- Fetching: Begin"
 
 echo $pwd
 
-mkdir /migrations-temp
-chmod -R 777 /migrations-temp
+cd /picsure-db-migrations/migrations/main/irct 
+mkdir irct_temp
+cd irct_temp
 
-mkdir /migrations
-chmod -R 777 /migrations
-cd /migrations
-mkdir sql
-chmod -R 777 /migrations/sql
-
-
-cd /migrations-temp
 git clone $1 .
 git checkout $2
 git status -u
 git branch
 
-cd IRCT-API/src/main/resources/db/
+echo $pwd
 
-cp -R sql/ /migrations/sql
-
-chmod -R 777 /migrations/sql
- 
+cd IRCT-API/src/main/resources/db/sql
+ls -altr
 
 
-echo "Get code from Repo: End"
+cp *.sql /picsure-db-migrations/migrations/main/irct
+
+cd /picsure-db-migrations/migrations/main/irct
+
+rm -rf irct_temp
+
+
+echo "IRCT Schema From Repo -- Fetching: End"

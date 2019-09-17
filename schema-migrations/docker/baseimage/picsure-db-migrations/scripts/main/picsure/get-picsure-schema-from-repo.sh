@@ -1,31 +1,29 @@
 #!/bin/bash
 
-echo "Get code from Repo: Begin"
+echo "PICSURE Schema From Repo -- Fetching: Begin"
 
 echo $pwd
 
-mkdir /migrations-temp
-chmod -R 777 /migrations-temp
+cd /picsure-db-migrations/migrations/main/picsure 
+mkdir picsure_temp
+cd picsure_temp
 
-mkdir /migrations
-chmod -R 777 /migrations
-cd /migrations
-mkdir sql
-chmod -R 777 /migrations/sql
-
-
-cd /migrations-temp
 git clone $1 .
 git checkout $2
 git status -u
 git branch
 
-cd pic-sure-api-data/src/main/resources/db/
+echo $pwd
 
-cp -R sql/ /migrations/sql
-
-chmod -R 777 /migrations/sql
- 
+cd pic-sure-api-data/src/main/resources/db/sql
+ls -altr
 
 
-echo "Get code from Repo: End"
+cp *.sql /picsure-db-migrations/migrations/main/picsure
+
+cd /picsure-db-migrations/migrations/main/picsure
+
+rm -rf picsure_temp
+
+
+echo "PICSURE Schema From Repo -- Fetching: End"
