@@ -33,9 +33,7 @@
      }    
     
      stage('Clean and Start the Base Container'){ 
-        steps { 
-        
-             
+        steps {  
         
         	 sh '''
         	 	CONTAINER_NAME="auth_migration_orchestrator"
@@ -55,7 +53,7 @@
     stage('Run DB Migration'){ 
         steps {  
         	 sh '''
-        	 	docker exec -i auth_migration_orchestrator bash -c \"/configs/auth-migration-orchestrator.sh\"
+        	 	docker exec -i auth_migration_orchestrator bash -c \"/picsure-db-migrations/scripts/main/auth/auth-migration-orchestrator.sh\"
 			''' 
 
         } 

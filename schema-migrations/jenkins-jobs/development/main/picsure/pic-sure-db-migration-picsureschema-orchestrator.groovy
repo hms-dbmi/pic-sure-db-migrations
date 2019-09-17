@@ -55,7 +55,7 @@
     stage('Run DB Migration'){ 
         steps {  
         	 sh '''
-        	 	docker exec -i picsuredb_schema_migrations_base_container bash -c \"/configs/picsure-migration-orchestrator.sh\"
+        	 	docker exec -i picsuredb_schema_migrations_base_container bash -c \"/picsure-db-migrations/scripts/main/picsure/picsure-migration-orchestrator.sh\"
 			''' 
 
         } 

@@ -1,5 +1,7 @@
 FROM jenkins/jenkins:lts
 
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+
 USER root 
 
 RUN apt-get update
@@ -10,6 +12,6 @@ RUN docker --version
 
 RUN apt-get install jq -y
 
-USER root
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
-VOLUME /var/jenkins_home
+USER root

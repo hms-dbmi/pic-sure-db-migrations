@@ -55,7 +55,7 @@
     stage('Run DB Migration'){ 
         steps {  
         	 sh '''
-        	 	docker exec -i irctdb_schema_migrations_base_container bash -c \"/configs/irct-migration-orchestrator.sh\"
+        	 	docker exec -i irctdb_schema_migrations_base_container bash -c \"/picsure-db-migrations/scripts/main/irct/irct-migration-orchestrator.sh\"
 			''' 
 
         } 

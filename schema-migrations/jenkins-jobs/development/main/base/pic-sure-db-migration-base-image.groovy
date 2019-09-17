@@ -1,9 +1,8 @@
 pipeline {
  
-  agent any
-  stages {
+  agent any 
   
-  
+  stages { 
     stage('Checkout code'){ 
         steps {
             sh  'git clone https://github.com/hms-dbmi/pic-sure-db-migrations.git'
@@ -20,8 +19,15 @@ pipeline {
     }
     
     stage('Push Base Docker Image to Docker Hub'){ 
+        
+        environment {
+            DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
+        }
+  
+
         steps {  
-            sh "docker login -u username -p password"
+            
+            sh "docker login -u $DOCKER_HUB_CREDENTIALS_USR -p $DOCKER_HUB_CREDENTIALS_PSW"
             sh "docker push dbmi/pic-sure-db-migrations:base_image"  
         } 
     }     

@@ -28,7 +28,7 @@
 
     stage('Prepare db changes for pic-sure-auth-microapp in the container'){ 
         steps {  
-        	sh "docker exec -i picsuredb_schema_migrations_base_container bash -c \"/configs/get-picsure-schema-from-repo.sh https://github.com/hms-dbmi/pic-sure.git ${env.PIC_SURE_AUTH_BRANCH_NAME}\"" 
+        	sh "docker exec -i picsuredb_schema_migrations_base_container bash -c \"/picsure-db-migrations/scripts/main/picsure/get-picsure-schema-from-repo.sh https://github.com/hms-dbmi/pic-sure.git ${env.PIC_SURE_AUTH_BRANCH_NAME}\"" 
         } 
     } 
     
@@ -40,8 +40,12 @@
     
     
     stage('Push Base Docker Image to Docker Hub'){ 
+        environment {
+            DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
+        }
+            
         steps {  
-            sh "docker login -u username -p password"
+            sh "docker login -u $DOCKER_HUB_CREDENTIALS_USR -p $DOCKER_HUB_CREDENTIALS_PSW"
             sh "docker push dbmi/pic-sure-db-migrations:picsuredb_image_v1.0"  
         } 
     }     
