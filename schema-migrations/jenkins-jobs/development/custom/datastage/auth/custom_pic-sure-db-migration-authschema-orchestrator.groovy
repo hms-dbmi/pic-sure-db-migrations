@@ -55,7 +55,7 @@
     stage('Run DB Migration'){ 
         steps {  
         	 sh '''
-        	 	docker exec -i auth_migration_orchestrator bash -c \"/configs/auth-custom-migration-orchestrator.sh\"
+        	 	docker exec -i auth_migration_orchestrator bash -c \"/picsure-db-migrations/scripts/custom/auth/auth-custom-migration-orchestrator.sh\"
 			''' 
 
         } 

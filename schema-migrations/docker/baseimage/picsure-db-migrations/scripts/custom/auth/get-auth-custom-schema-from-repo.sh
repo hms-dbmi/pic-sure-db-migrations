@@ -8,6 +8,8 @@ cd /picsure-db-migrations/migrations/custom/auth
 mkdir auth_temp
 cd auth_temp
 
+echo $1
+
 git clone $1 .
 git checkout $2
 git status -u

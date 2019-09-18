@@ -28,7 +28,7 @@
 
     stage('Prepare db changes for pic-sure-auth-microapp in the container'){ 
         steps {  
-        	sh "docker exec -i authdb_schema_migrations_base_container bash -c \"/configs/get-psama-custom-schema-from-repo.sh https://github.com/hms-dbmi/pic-sure-db-custom-migrations.git ${env.PIC_SURE_AUTH_BRANCH_NAME}\"" 
+        	sh "docker exec -i authdb_schema_migrations_base_container bash -c \"/picsure-db-migrations/scripts/custom/auth/get-auth-custom-schema-from-repo.sh https://$GITHUB_CREDENTIALS_USR:$GITHUB_CREDENTIALS_PSW@github.com/hms-dbmi/pic-sure-db-datastage-custom-migrations.git ${env.PIC_SURE_AUTH_BRANCH_NAME}\"" 
         } 
     } 
     
@@ -39,11 +39,17 @@
     }    
     
     
-    stage('Push Base Docker Image to Docker Hub'){ 
+    stage('Push Base Docker Image to Docker Hub'){
+        environment {
+            DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
+        }
+        
+        
         steps {  
-            sh "docker login -u username -p password"
-            sh "docker push dbmi/pic-sure-db-migrations:authdb_custom_image_v1.0"  
-        } 
+            sh "docker login -u $DOCKER_HUB_CREDENTIALS_USR -p $DOCKER_HUB_CREDENTIALS_PSW"
+            sh "docker push dbmi/pic-sure-db-migrations:authdb_custom_image_v1.0" 
+        }     
+        
     }     
     
     stage('Clean up'){ 
