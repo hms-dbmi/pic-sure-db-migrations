@@ -14,19 +14,19 @@
         steps { 
         
         	 sh '''
-        	 	CONTAINER_NAME="authdb_schema_migrations_base_container"
+        	 	CONTAINER_NAME="irctdb_schema_migrations_base_container"
 				CONTAINER_FOUND="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
 				if [ -n "$CONTAINER_FOUND" ]; then
   					docker stop $CONTAINER_FOUND && docker rm $CONTAINER_FOUND
 				fi			
-				docker run --name authdb_schema_migrations_base_container -d dbmi/pic-sure-db-migrations:base_image		 
+				docker run --name irctdb_schema_migrations_base_container -d dbmi/pic-sure-db-migrations:base_image		 
 			''' 
 			
             sleep(time:15,unit:"SECONDS")
         } 
      }    
 
-    stage('Prepare db changes for pic-sure-auth-microapp in the container'){ 
+    stage('Prepare db changes for pic-sure-auth-microapp in the container'){       
         environment {
             GITHUB_CREDENTIALS = credentials('GITHUB_CREDENTIALS')
             def password = "$GITHUB_CREDENTIALS_PSW" 
@@ -37,35 +37,34 @@
         
         steps { 
         
-			sh "docker exec -i authdb_schema_migrations_base_container bash -c \"/picsure-db-migrations/scripts/custom/auth/get-auth-custom-schema-from-repo.sh https://$GITHUB_CREDENTIALS_USR:${env.CLEANED_PASSWORD}@github.com/hms-dbmi/pic-sure-db-datastage-custom-migrations.git ${env.PIC_SURE_AUTH_BRANCH_NAME}\""			
+			sh "docker exec -i irctdb_schema_migrations_base_container bash -c \"/picsure-db-migrations/scripts/custom/irct/get-irct-custom-schema-from-repo.sh https://$GITHUB_CREDENTIALS_USR:${env.CLEANED_PASSWORD}@github.com/hms-dbmi/pic-sure-db-datastage-custom-migrations.git ${env.PIC_SURE_AUTH_BRANCH_NAME}\""			
         
-        } 
+        }
     } 
     
     stage('Commit changes'){ 
         steps { 
-            sh "docker commit -m 'jenkins job commit' authdb_schema_migrations_base_container dbmi/pic-sure-db-migrations:authdb_custom_image_v1.0"
+            sh "docker commit -m 'jenkins job commit' irctdb_schema_migrations_base_container dbmi/pic-sure-db-migrations:irctdb_custom_image_v1.0"
         } 
     }    
     
     
-    stage('Push Base Docker Image to Docker Hub'){
+    stage('Push Base Docker Image to Docker Hub'){ 
         environment {
             DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
         }
-        
-        
+            
+    
         steps {  
             sh "docker login -u $DOCKER_HUB_CREDENTIALS_USR -p $DOCKER_HUB_CREDENTIALS_PSW"
-            sh "docker push dbmi/pic-sure-db-migrations:authdb_custom_image_v1.0" 
-        }     
-        
+            sh "docker push dbmi/pic-sure-db-migrations:irctdb_custom_image_v1.0"  
+        } 
     }     
     
     stage('Clean up'){ 
         steps {  
         	 sh '''
-        	 	CONTAINER_NAME="authdb_schema_migrations_base_container"
+        	 	CONTAINER_NAME="irctdb_schema_migrations_base_container"
 				CONTAINER_FOUND="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
 				if [ -n "$CONTAINER_FOUND" ]; then
   					docker stop $CONTAINER_FOUND && docker rm $CONTAINER_FOUND
@@ -73,13 +72,13 @@
 			''' 
 
         } 
-    }     
+    }  
     
     stage('Clean Workspace'){ 
         steps {  
             cleanWs()
         } 
-    }      
+    }       
    
   }          
     
