@@ -41,7 +41,7 @@ class PropertyFileCreator():
     
     def __init__(self):
         self.data = {}
-        with open('dataSTAGE-properties.json', 'r') as input_file:
+        with open('/dataSTAGE-properties.json', 'r') as input_file:
             self.data = json.load(input_file)
     
     def create_files(self): 
