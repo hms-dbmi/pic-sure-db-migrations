@@ -5,28 +5,32 @@ pipeline {
   
   environment {
      def BUILD_TIMESTAMP = sh(script: "echo `date +%Y%m%d%H%M%S`", returnStdout: true).trim()
-     def DOCKER_IMAGE_NAME  = "cic-pic-sure-db-authschema-migration-image.tar.gz"  
-     def S3_CONTAINER_NAME="main_auth_image_container"
-     def CONTAINER_NAME="main_authschema_orchestrator" 
-  }  
+     def AUTHSCHEMA_IMAGE_NAME  = "picsure-db-migration-authschema-image"  
+     def CONTAINER_NAME="main_authschema_orchestrator_container" 
+     
+     def S3_PROFILE_NAME  = "datastage-prod"
+     def S3_BUCKET_NAME  = "ad381-datastage" 
+  }   
   
   stages { 
     stage('Prechecks'){ 
         steps {
-            sh 'aws s3 ls'
+            sh 'aws s3 ls  --profile $S3_PROFILE_NAME'
         } 
     }   
     
     stage('Copy Image from S3 to Local'){ 
         steps {
-            sh 'aws s3 cp s3://ad381-datastage/"$S3_CONTAINER_NAME".tar.gz . '
+            sh '''
+            	aws s3 cp s3://$S3_BUCKET_NAME/$AUTHSCHEMA_IMAGE_NAME . --profile $S3_PROFILE_NAME 
+            '''
         } 
     }
      
-    stage('Import Docker Image'){ 
+    stage('Load Docker Image'){ 
         steps {
             sh ''' 
-            	docker import "$S3_CONTAINER_NAME".tar.gz  picsure-db-migrations:authschema-migration-image
+            	docker load < $AUTHSCHEMA_IMAGE_NAME
 			'''
         } 
     }
@@ -41,38 +45,18 @@ pipeline {
 			''' 
 
 			sh '''
-				docker run --name auth_migration_orchestrator_container -v /flyway-configs:/flyway-configs -d --entrypoint /usr/bin/python3  picsure-db-migrations:authschema-migration-image /app/index.py
+				docker run --name $CONTAINER_NAME  -d --entrypoint /usr/bin/python3  dbmi/picsure-db-migrations:$AUTHSCHEMA_IMAGE_NAME /app/index.py
 				
 			'''
 			
             sleep(time:15,unit:"SECONDS")
         } 
     }
-     
-    stage('Export Docker Container'){ 
-        steps {   
-            sh '''
- 				CONTAINER_ID="$(docker inspect --format="{{.Id}}" auth_migration_orchestrator_container)"  
- 				CONTAINER_ID_WITH_EXTENSION=auth_migration_orchestrator_container.tar.gz
- 				docker export "$CONTAINER_NAME" | gzip > "$CONTAINER_ID_WITH_EXTENSION"  
- 			''' 
-        } 
-    }   
-    
-    stage('Push Docker Image to S3'){  
-        steps {   
- 			sh '''
- 				CONTAINER_ID="$(docker inspect --format="{{.Id}}" auth_migration_orchestrator_container)"  
- 				CONTAINER_ID_WITH_EXTENSION=auth_migration_orchestrator_container.tar.gz
- 				aws s3 --sse=AES256 cp "$CONTAINER_ID_WITH_EXTENSION" s3://ad381-datastage/"$CONTAINER_ID_WITH_EXTENSION" 
- 			''' 
-        } 
-    }     
-     
+      
     stage('Run DB Migration'){ 
         steps {  
         	 sh '''
-        	 	docker exec -i auth_migration_orchestrator_container bash -c \"/picsure-db-migrations/scripts/main/auth/auth-migration-orchestrator.sh\"
+        	 	docker exec -i $CONTAINER_NAME bash -c \"/picsure-db-migrations/scripts/main/auth/auth-migration-orchestrator.sh\"
 			'''  
         } 
     }     
@@ -80,7 +64,7 @@ pipeline {
     stage('Clean up resources'){ 
         steps {  
         	 sh '''
-        	 	CONTAINER_NAME="auth_migration_orchestrator_container"
+        	 	CONTAINER_NAME=$CONTAINER_NAME
 				CONTAINER_FOUND="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
 				if [ -n "$CONTAINER_FOUND" ]; then
   					docker stop $CONTAINER_FOUND && docker rm $CONTAINER_FOUND

@@ -8,7 +8,8 @@ class DBProps():
         self.db_user = db_params['db_user']
         self.db_password = db_params['db_password']
         self.db_host = db_params['db_host']
-        self.db_port = db_params['db_port'] 
+        self.db_port = db_params['db_port']
+        self.db_schema = db_params['db_schema'] 
         
     def create_db_properties(self):
         with open('/flyway-configs/db.properties', mode = 'w') as file:
@@ -17,6 +18,7 @@ class DBProps():
             file.write('mysql.password='+self.db_password+'\n')
             file.write('mysql.host='+self.db_host+'\n')
             file.write('mysql.port='+str(self.db_port)+'\n') 
+            file.write('mysql.schema='+str(self.db_schema)+'\n') 
             
 class FlywayConf():
     def __init__(self, **flyway_params):
@@ -51,7 +53,8 @@ class PropertyFileCreator():
                     'db_user': d['db_username'],
                     'db_password': d['db_password'], 
                     'db_host': d['db_host'], 
-                    'db_port': d['db_port'] 
+                    'db_port': d['db_port'],
+                    'db_schema': d['db_schema']  
                 }
                 auth = DBProps(**db_params)
                 auth.create_db_properties() 

@@ -5,7 +5,8 @@
 			"db_username": "root",
 			"db_password": "mysql",
 			"db_host": "172.17.0.4",
-			"db_port": 3306
+			"db_port": 3306,
+			"db_schema": "mysql"
 		},	
 		{
 			"connection_name": "auth_db_connection",
