@@ -28,15 +28,14 @@ class FlywayConf():
         self.db_port = flyway_params['db_port']
         self.db_schema = flyway_params['db_schema']
         self.locations = flyway_params['locations']
-                 
-        
+                  
     def create_flyway_conf(self, **args):
         with open('/flyway-configs/flyway-'+ args['file_name']+'.conf', mode = 'w') as file:  
-            flyway_url = 'mysql://'+self.db_host+':'+str(self.db_port)+'/'+self.db_schema
-            file.write('flay.url='+flyway_url+'\n')
+            flyway_url = 'jdbc:mysql://'+self.db_host+':'+str(self.db_port)+'/'+self.db_schema
+            file.write('flyway.url='+flyway_url+'\n')
             file.write('flyway.user='+self.db_user+'\n')
             file.write('flyway.password='+self.db_password+'\n')
-            file.write('flyway.locations='+self.db_host+'\n')  
+            file.write('flyway.locations='+self.locations+'\n')  
             file.write('flyway.schemas='+self.db_schema+'\n')        
      
 class PropertyFileCreator():
@@ -65,7 +64,7 @@ class PropertyFileCreator():
                     'db_host': d['db_host'], 
                     'db_port': d['db_port'],
                     'db_schema': 'auth', 
-                    'locations': 'filesystem:./sql'
+                    'locations': 'filesystem:/picsure-db-migrations/migrations/main/auth'
                 }
                 auth = FlywayConf(**flyway_params)
                 auth.create_flyway_conf(file_name = 'auth') 
@@ -76,7 +75,7 @@ class PropertyFileCreator():
                     'db_host': d['db_host'], 
                     'db_port': d['db_port'],
                     'db_schema': 'picsure', 
-                    'locations': 'filesystem:./sql'
+                    'locations': 'filesystem:/picsure-db-migrations/migrations/main/picsure'
                 }
                 auth = FlywayConf(**flyway_params)
                 auth.create_flyway_conf(file_name = 'picsure') 
