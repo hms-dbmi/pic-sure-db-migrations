@@ -14,4 +14,6 @@ RUN apt-get install jq -y
 
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
+RUN apt-get install awscli -y
+
 USER root
