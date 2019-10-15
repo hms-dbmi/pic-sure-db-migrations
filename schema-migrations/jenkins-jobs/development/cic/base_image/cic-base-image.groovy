@@ -65,8 +65,8 @@ pipeline {
     stage('Copy S3 Properties to Container and Save Image'){ 
         steps {
             sh '''
-            	docker cp $S3_BUCKET_PROPERTIES_FILE_NAME "$CONTAINER_NAME":/$S3_BUCKET_PROPERTIES_FILE_NAME 
-            	docker exec -i $CONTAINER_NAME bash -c \"python /picsure-db-migrations/scripts/build_properties.py\"
+            	docker cp /$S3_BUCKET_PROPERTIES_FILE_NAME "$CONTAINER_NAME":/$S3_BUCKET_PROPERTIES_FILE_NAME 
+            	docker exec -i $CONTAINER_NAME bash -c \"python3 /picsure-db-migrations/scripts/build_properties.py\"
             	docker commit $CONTAINER_NAME dbmi/pic-sure-db-migrations:cic-pic-sure-db-migrations-baseimage
             ''' 
         } 
